@@ -1,0 +1,70 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# anidb
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+`anidb` is an R-package that returns information from the anime database at [AniDB](https://anidb.net). **You should not use this package to request the same dataset multiple times on a single day or flood it with requests -- otherwise you can get banned by the AniDB administrators.** If using `Rmd`, you should add `cache = TRUE` in chunks. For interactive use, `anidb` employs a simple caching mechanism.
+
+## Installation
+
+You can install the development version of anidb from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("emitanaka/anidb")
+```
+
+## Example
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(cache.path = "cache/")
+```
+
+
+```{r setup}
+library(anidb)
+```
+
+Get all IDs with anime titles that has an approximate matching with "one piece" ignoring case:
+
+```{r}
+aids <- anime_id(title = "one piece")
+```
+
+You can check the official titles of these anime IDs:
+
+```{r}
+official_title(aids)
+```
+
+
+
+```{r anime-info, cache = TRUE}
+onepiece <- anime_info(aids)
+```
+```{r}
+head(onepiece)
+```
+
+```{r}
+library(ggplot2)
+ggplot(onepiece, aes(start_date, rating)) + 
+  geom_point()
+```
+
+
