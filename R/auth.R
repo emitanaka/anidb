@@ -16,10 +16,14 @@ anidb_authenticate_user <- function(user = NULL, password = askpass::askpass("us
 .ANIDB_ENV$CLIENT_HTTP_VERSION <- 1L
 .ANIDB_ENV$UASTRING <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36"
 .ANIDB_ENV$LOGIN_URL <- "https://anidb.net/user/login"
+.ANIDB_ENV$ANIME_RATINGS_TS <- list()
+.ANIDB_ENV$ANIME_RATINGS_DIST <- list()
+.ANIDB_ENV$ANIME_RATINGS_GENDER_DIST <- list()
 
 anidb_session_login <- function(force = NULL) {
   already_logged_in <- force %||% .ANIDB_ENV$LOGIN_SUCCESS %||% FALSE
   if(!already_logged_in) {
+    message("Attempting to login")
     pgsession <- session(.ANIDB_ENV$LOGIN_URL, user_agent(.ANIDB_ENV$UASTRING))
     pgform <- html_form(pgsession)[[1]]
     user <- .ANIDB_ENV$USER %||% getOption("anidb.user")

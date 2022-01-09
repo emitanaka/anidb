@@ -4,10 +4,17 @@
 \alias{anime_ratings_ts}
 \title{Get the time series for the ratings}
 \usage{
-anime_ratings_ts(aid = NULL)
+anime_ratings_ts(aid = NULL, include_title = TRUE)
 }
 \arguments{
-\item{aid}{The anime aid}
+\item{aid}{The vector of anime aid.}
+
+\item{include_title}{A logical value indicating whether to include the title in the
+output data frame.}
+}
+\value{
+A data frame containing the columns \code{votes}, \code{date}, \code{rating}, and the
+anime ID (\code{aid}). Optionally it may include the primary \code{title}.
 }
 \description{
 Get the time series for the ratings
