@@ -20,7 +20,7 @@ anidb_authenticate_user <- function(user = NULL, password = askpass::askpass("us
 anidb_session_login <- function(force = NULL) {
   already_logged_in <- force %||% .ANIDB_ENV$LOGIN_SUCCESS %||% FALSE
   if(!already_logged_in) {
-    pgsession <- session(.ANIDB_ENV$LOGIN , user_agent(.ANIDB_ENV$UASTRING))
+    pgsession <- session(.ANIDB_ENV$LOGIN_URL, user_agent(.ANIDB_ENV$UASTRING))
     pgform <- html_form(pgsession)[[1]]
     user <- .ANIDB_ENV$USER %||% getOption("anidb.user")
     password <- .ANIDB_ENV$PASSWORD %||% getOption("anidb.password")
@@ -32,11 +32,10 @@ anidb_session_login <- function(force = NULL) {
     res <- session_submit(pgsession, filled_form)
     success <- is_success(res)
     .ANIDB_ENV$LOGIN_SUCCESS <- success
-    .ANDIB_ENV$LOGIN_SESSION <- pgsession
+    .ANIDB_ENV$LOGIN_SESSION <- pgsession
     if(!success) {
       warning("The login was unsuccessful.")
     }
-    return(success)
   }
-  TRUE
+  .ANIDB_ENV$LOGIN_SESSION
 }
