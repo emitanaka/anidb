@@ -1,5 +1,5 @@
 Package: anidb
-Title: An UDP client for AniDB 
+Title: Fetch data from the anime database at AniDB 
 Version: 0.0.0.9000
 Authors@R: 
     person("Emi", "Tanaka", , "dr.emi.tanaka@gmail.com", role = c("aut", "cre"),
