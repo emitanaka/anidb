@@ -18,6 +18,10 @@ anime_info <- function(aid = NULL) {
                                      aid = xaid))
       #cont <- content(resp, as = "parsed", type = "text/xml", encoding = "UTF-8")
       cont <- content(resp, as = "text")
+      if(grepl("banned", tolower(cont))) {
+        abort("You have been banned. This is likely because you requested the same dataset multiple times on a single day.")
+      }
+
       res <- XML::xmlTreeParse(cont)
       info <- XML::xmlToList(res)
       titles <- list(unique(vapply(info$titles[c(TRUE, FALSE)], function(x) x[[1]], character(1))))
@@ -34,18 +38,34 @@ anime_info <- function(aid = NULL) {
                                total = similar_total,
                                stringsAsFactors = FALSE)
 
-
-      out[[i]] <- data.frame(type = info$type,
+      startdate <- ifelse(grepl("[0-9]{4}-[0-9]{2}-[0-9]{2}", info$startdate),
+                          info$startdate,
+                          paste0(info$startdate, "-01"))
+      enddate <- info$enddate %||% NA
+      enddate <- ifelse(grepl("[0-9]{4}-[0-9]{2}-[0-9]{2}", enddate) | is.na(enddate),
+                        enddate,
+                        paste0(enddate, "-01"))
+      if(is.null(info$ratings)) {
+        info$ratings <- matrix(c(NA, 0L, NA, 0L), nrow = 2,
+                               dimnames = list(c("text", ".attrs"),
+                                               c("permanent", "temporary")))
+      }
+      out[[i]] <- data.frame(aid = xaid,
+                             type = info$type,
                              episode_count = info$episodecount,
-                             start_date = as.Date(info$startdate),
-                             end_date = as.Date(info$enddate),
+                             start_date = as.Date(startdate),
+                             end_date = as.Date(enddate),
                              titles = I(titles),
                              rating = as.numeric(info$ratings["text", "permanent"]),
                              rating_votes = as.integer(info$ratings[".attrs", "permanent"]),
                              rating_temp = as.numeric(info$ratings["text", "temporary"]),
                              rating_temp_votes = as.integer(info$ratings[".attrs", "temporary"]),
-                             rating_review = as.numeric(info$ratings["text", "review"]),
-                             rating_review_votes = as.integer(info$ratings[".attrs", "review"]),
+                             rating_review = ifelse("review" %in% colnames(info$ratings),
+                                                    as.numeric(info$ratings["text", "review"]),
+                                                    NA),
+                             rating_review_votes = ifelse("review" %in% colnames(info$ratings),
+                                                          as.integer(info$ratings[".attrs", "review"]),
+                                                          0L),
                              related_anime = I(list(related_df)),
                              similar_anime = I(list(similar_df)))
 

@@ -25,6 +25,10 @@ cmap_int <- function(x, f, name = FALSE) {
   map_mold(x, function(x) as.integer(f(x)), integer(1), name)
 }
 
+map_int <- function(x, f, name = FALSE) {
+  map_mold(x, f, integer(1), name)
+}
+
 map_dbl <- function(x, f, name = FALSE) {
   map_mold(x, f, numeric(1), name)
 }
