@@ -19,6 +19,8 @@ anidb_authenticate_user <- function(user = NULL, password = askpass::askpass("us
 .ANIDB_ENV$ANIME_RATINGS_TS <- list()
 .ANIDB_ENV$ANIME_RATINGS_DIST <- list()
 .ANIDB_ENV$ANIME_RATINGS_GENDER_DIST <- list()
+.ANIDB_ENV$ANIME_INFO <- list()
+
 
 anidb_session_login <- function(force = NULL) {
   already_logged_in <- force %||% .ANIDB_ENV$LOGIN_SUCCESS %||% FALSE

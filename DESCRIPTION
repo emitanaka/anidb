@@ -16,7 +16,8 @@ Imports:
     httr,
     jsonlite,
     rlang,
-    rvest
+    rvest,
+    XML
 Depends: 
     R (>= 2.10)
 LazyData: true
